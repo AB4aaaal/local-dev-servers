@@ -2,18 +2,22 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mongo-server
+  namespace: default
   labels:
     app: mongo-server
+    release: 1.0.0
 spec:
   minReadySeconds: 60
   selector:
     matchLabels:
       app: mongo-server
+      release: 1.0.0
   
   template:
     metadata:
       labels:
         app: mongo-server
+        release: 1.0.0
     
     spec:
       containers:
@@ -34,10 +38,12 @@ metadata:
   name: mongo-server
   labels:
     app: mongo-server
+    release: 1.0.0
 spec:
   type: NodePort
   selector:
     app: mongo-server
+    release: 1.0.0
   ports:
   - port: 27024
     targetPort: 27017
