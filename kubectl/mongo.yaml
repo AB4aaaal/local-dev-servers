@@ -15,6 +15,7 @@ spec:
         app: mongo-server
     
     spec:
+      minReadySeconds: 60
       containers:
       - name: mongo-server
   
