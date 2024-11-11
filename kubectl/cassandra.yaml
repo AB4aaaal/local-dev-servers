@@ -5,36 +5,39 @@ metadata:
   labels:
     app: cassandra-server
 spec:
+  minReadySeconds: 120
   selector:
     matchLabels:
       app: cassandra-server
-  
+
   template:
     metadata:
       labels:
         app: cassandra-server
-    
+
     spec:
       containers:
-      - name: cassandra-server
-        image: "bitnami/cassandra"
-        volumeMounts:
-          - mountPath: "/bitnami"
-            name: "cassandra-data"
-        resources:
-          limits:
-            memory: "500Mi"
-            cpu: "500m"
-        ports:
-        - containerPort: 9042
-        - containerPort: 7000
-        env:
-          - name: "CASSANDRA_SEEDS"
-            value: "cassandra"
-          - name: "CASSANDRA_PASSWORD_SEEDER"
-            value: "yes"
-          - name: "CASSANDRA_PASSWORD"
-            value: "cassandra"         
+        - name: cassandra-server
+          image: "bitnami/cassandra"
+          volumeMounts:
+            - mountPath: "/bitnami"
+              name: "cassandra-data"
+          resources:
+            requests:
+              memory: "3Gi"
+            limits:
+              memory: "4Gi"
+              cpu: "500m"
+          ports:
+            - containerPort: 9042
+            - containerPort: 7000
+          securityContext:
+            runAsUser: 0
+          env:
+            - name: "CASSANDRA_PASSWORD_SEEDER"
+              value: "yes"
+            - name: "CASSANDRA_PASSWORD"
+              value: "cassandra"
       volumes:
         - name: "cassandra-data"
           emptyDir: {}
@@ -50,9 +53,6 @@ spec:
   selector:
     app: cassandra-server
   ports:
-  - port: 9600
-    targetPort: 9042
-    name: "p1"
-  - port: 9900
-    targetPort: 7000
-    name: "p2"
+    - port: 9600
+      targetPort: 9042
+      name: "p1"
